@@ -1,24 +1,33 @@
-import { Router } from 'express';
+import { Router } from "express";
 
 import {
   getRoutines,
   createRoutine,
   deleteRoutine,
-} from '../controllers/routines.js';
+  updateRoutineExercise,
+} from "../controllers/routines.js";
 
-import auth from '../middlewares/auth.js';
+import auth from "../middlewares/auth.js";
 
 import {
   validateRoutine,
   validateRoutineId,
-} from '../middlewares/validation.js';
+  validateRoutineExercise,
+} from "../middlewares/validation.js";
 
 const router = Router();
 
-router.get('/', auth, getRoutines);
+router.get("/", auth, getRoutines);
 
-router.post('/', auth, validateRoutine, createRoutine);
+router.post("/", auth, validateRoutine, createRoutine);
 
-router.delete('/:routineId', auth, validateRoutineId, deleteRoutine);
+router.delete("/:routineId", auth, validateRoutineId, deleteRoutine);
+
+router.patch(
+  "/:routineId/exercises/:exerciseIndex",
+  auth,
+  validateRoutineExercise,
+  updateRoutineExercise,
+);
 
 export default router;

@@ -1,17 +1,24 @@
-import dotenv from 'dotenv';
-import express from 'express';
-import helmet from 'helmet';
-import connectDatabase from './utils/db.js';
-import routes from './routes/index.js';
-import errorHandler from './middlewares/error-handler.js';
-import requestLogger from './middlewares/request-logger.js';
-import errorLogger from './middlewares/error-logger.js';
-import rateLimiter from './middlewares/rate-limiter.js';
+import dotenv from "dotenv";
+import express from "express";
+import helmet from "helmet";
+import connectDatabase from "./utils/db.js";
+import routes from "./routes/index.js";
+import errorHandler from "./middlewares/error-handler.js";
+import requestLogger from "./middlewares/request-logger.js";
+import errorLogger from "./middlewares/error-logger.js";
+import rateLimiter from "./middlewares/rate-limiter.js";
+import cors from "cors";
 
 dotenv.config();
 
 const app = express();
 const PORT = 3000;
+
+app.use(
+  cors({
+    origin: ["http://localhost:5173", "https://volt.cebollero.com"],
+  }),
+);
 
 connectDatabase();
 
@@ -23,11 +30,11 @@ app.use(rateLimiter);
 
 app.use(requestLogger);
 
-app.get('/', (req, res) => {
-  res.send('Volt API is running');
+app.get("/", (req, res) => {
+  res.send("Volt API is running");
 });
 
-app.use('/api', routes);
+app.use("/api", routes);
 
 app.use(errorLogger);
 

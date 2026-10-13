@@ -1,4 +1,4 @@
-import { celebrate, Joi } from 'celebrate';
+import { celebrate, Joi } from "celebrate";
 
 export const validateSignup = celebrate({
   body: Joi.object({
@@ -20,8 +20,7 @@ export const validateRoutine = celebrate({
     nombre: Joi.string().trim().required(),
     objetivo: Joi.string().trim().required(),
     nivel: Joi.string().trim().required(),
-    dias: Joi.number().integer().min(1).max(7)
-      .required(),
+    dias: Joi.number().integer().min(1).max(7).required(),
     equipamiento: Joi.array().items(Joi.string()).default([]),
     ejercicios: Joi.array()
       .items(
@@ -41,5 +40,16 @@ export const validateRoutine = celebrate({
 export const validateRoutineId = celebrate({
   params: Joi.object({
     routineId: Joi.string().hex().length(24).required(),
+  }),
+});
+
+export const validateRoutineExercise = celebrate({
+  params: Joi.object({
+    routineId: Joi.string().hex().length(24).required(),
+    exerciseIndex: Joi.number().integer().min(0).required(),
+  }),
+
+  body: Joi.object({
+    hecho: Joi.boolean().required(),
   }),
 });
