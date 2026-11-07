@@ -1,0 +1,17 @@
+.about {
+  padding: 24px;
+  background: var(--card-bg);
+  border-radius: 12px;
+  margin: 0 24px 24px;
+}
+
+.about__title {
+  color: var(--text-h);
+  font-size: 18px;
+}
+
+.about__text {
+  color: var(--gray-200);
+  font-size: 15px;
+  line-height: 1.6;
+}

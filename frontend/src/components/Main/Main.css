@@ -1,0 +1,7 @@
+.main {
+  padding: 32px 24px;
+}
+
+.main__title {
+  color: var(--text-h);
+}

@@ -1,0 +1,95 @@
+.rutina-page {
+  padding: 32px 24px;
+}
+
+.rutina-page__empty {
+  color: var(--gray-400);
+  font-size: 15px;
+  margin-top: 24px;
+}
+
+.rutina-page__list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  list-style: none;
+  margin: 24px 0 0;
+  padding: 0;
+}
+
+@media (max-width: 900px) {
+  .rutina-page__list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .rutina-page__list {
+    grid-template-columns: 1fr;
+  }
+}
+
+.exercise-card {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 16px;
+  text-align: left;
+}
+
+.exercise-card__name {
+  color: var(--text-h);
+  font-size: 16px;
+  margin: 0 0 4px;
+}
+
+.exercise-card__muscle {
+  color: var(--yellow);
+  font-size: 12px;
+  text-transform: uppercase;
+  margin: 0 0 8px;
+}
+
+.exercise-card__text {
+  color: var(--gray-200);
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0 0 8px;
+}
+
+.exercise-card__equipment {
+  color: var(--gray-400);
+  font-size: 12px;
+  margin: 0;
+}
+
+.rutina-page__more {
+  display: block;
+  margin: 24px auto 0;
+  padding: 10px 24px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  color: var(--text-h);
+  font-size: 14px;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.rutina-page__more:hover {
+  border-color: var(--yellow);
+}
+
+.exercise-card__day {
+  color: var(--gray-400);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0 0 6px;
+}
+
+.exercise-card__prescription {
+  color: var(--text-h);
+  font-size: 13px;
+  font-weight: 500;
+  margin: 0 0 8px;
+}

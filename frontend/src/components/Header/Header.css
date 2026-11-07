@@ -1,0 +1,52 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  background: var(--gray-950);
+  border-bottom: 1px solid var(--border);
+}
+
+.header__logo {
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--text-h);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.header__logo-icon {
+  width: 20px;
+  height: 20px;
+  color: var(--yellow);
+}
+
+.header__actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.header__login {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: none;
+  background: var(--yellow);
+  color: var(--gray-950);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    opacity 0.2s ease,
+    transform 0.1s ease;
+}
+
+.header__login:hover {
+  opacity: 0.9;
+}
+
+.header__login:active {
+  transform: scale(0.97);
+}
