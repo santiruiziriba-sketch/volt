@@ -13,7 +13,7 @@ function About() {
       <p className="about__text">
         El objetivo es que cada persona reciba una rutina acorde a su meta, su
         nivel y su tiempo disponible, con la misma lógica que aplicaría un
-        entrenador, pero disponible en cualquier momento.
+        entrenador, pero a tu disposición en cualquier momento.
       </p>
     </section>
   );
