@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useLocation } from "react-router-dom";
 import "./RutinaPage.css";
 import Preloader from "../Preloader/Preloader";
@@ -7,9 +7,11 @@ import { armarRutina } from "../../utils/routineBuilder";
 import {
   obtenerConfiguracionObjetivo,
   DIFICULTAD_POR_NIVEL,
+  ITEMS_POR_PAGINA,
 } from "../../utils/trainingConfig";
+import CurrentUserContext from "../../contexts/CurrentUserContext";
+import { createRoutine, getRoutines } from "../../utils/MainApi";
 
-const ITEMS_POR_PAGINA = 3;
 const CLAVE_STORAGE = "volt-rutina";
 
 function leerGuardado() {
@@ -22,9 +24,47 @@ function leerGuardado() {
 
 function RutinaPage() {
   const location = useLocation();
+  const { currentUser } = useContext(CurrentUserContext);
   const [guardado, setGuardado] = useState(leerGuardado);
   const [errorClave, setErrorClave] = useState(null);
   const [cantidadVisible, setCantidadVisible] = useState(ITEMS_POR_PAGINA);
+
+  const [guardando, setGuardando] = useState(false);
+  const [errorGuardado, setErrorGuardado] = useState("");
+  const [rutinaGuardadaId, setRutinaGuardadaId] = useState(
+    () => leerGuardado()?.rutinaId ?? null,
+  );
+
+  useEffect(() => {
+    if (!currentUser || !rutinaGuardadaId) return;
+
+    getRoutines()
+      .then((rutinas) => {
+        const existe = rutinas.some(
+          (rutina) => rutina._id === rutinaGuardadaId,
+        );
+
+        if (!existe) {
+          const guardadoActualizado = leerGuardado();
+
+          if (guardadoActualizado) {
+            delete guardadoActualizado.rutinaId;
+
+            localStorage.setItem(
+              CLAVE_STORAGE,
+              JSON.stringify(guardadoActualizado),
+            );
+
+            setGuardado(guardadoActualizado);
+          }
+
+          setRutinaGuardadaId(null);
+        }
+      })
+      .catch((err) => {
+        console.error("Error al comprobar la rutina guardada:", err);
+      });
+  }, [currentUser, rutinaGuardadaId]);
 
   const datosActuales = location.state ?? guardado?.datos ?? null;
   const clave = datosActuales ? JSON.stringify(datosActuales) : null;
@@ -76,6 +116,53 @@ function RutinaPage() {
     };
   }, [clave, config, rutina, datosActuales]);
 
+  async function handleGuardarRutina() {
+    if (!currentUser || !config || ejercicios.length === 0) {
+      return;
+    }
+
+    if (rutinaGuardadaId || guardando) {
+      return;
+    }
+
+    setGuardando(true);
+    setErrorGuardado("");
+
+    try {
+      const nuevaRutina = await createRoutine({
+        nombre: `Rutina de ${config.nombre}`,
+        objetivo: datosActuales.objetivo,
+        nivel: datosActuales.nivel,
+        dias: datosActuales.dias,
+        equipamiento: datosActuales.equipamiento ?? [],
+        ejercicios: ejercicios.map((ej) => ({
+          dia: ej.dia,
+          nombre: ej.name,
+          series: ej.series,
+          repeticiones: ej.repeticiones,
+          imagen: ej.imagen || "https://placehold.co/600x400?text=Exercise",
+          hecho: false,
+        })),
+      });
+
+      const guardadoActualizado = {
+        ...guardado,
+        rutinaId: nuevaRutina._id,
+      };
+
+      localStorage.setItem(CLAVE_STORAGE, JSON.stringify(guardadoActualizado));
+
+      setGuardado(guardadoActualizado);
+      setRutinaGuardadaId(nuevaRutina._id);
+    } catch (err) {
+      setErrorGuardado(
+        err.message || "No se pudo guardar la rutina. Intentá nuevamente.",
+      );
+    } finally {
+      setGuardando(false);
+    }
+  }
+
   function mostrarMas() {
     setCantidadVisible((actual) => actual + ITEMS_POR_PAGINA);
   }
@@ -103,6 +190,26 @@ function RutinaPage() {
 
       {!cargando && !error && ejercicios.length > 0 && (
         <>
+          {currentUser && (
+            <div className="rutina-page__save">
+              <button
+                type="button"
+                className="rutina-page__save-button"
+                onClick={handleGuardarRutina}
+                disabled={guardando || Boolean(rutinaGuardadaId)}
+              >
+                {guardando
+                  ? "Guardando..."
+                  : rutinaGuardadaId
+                    ? "Rutina guardada ✓"
+                    : "Guardar rutina"}
+              </button>
+
+              {errorGuardado && (
+                <p className="rutina-page__save-error">{errorGuardado}</p>
+              )}
+            </div>
+          )}
           <ul className="rutina-page__list">
             {ejerciciosVisibles.map((ej, index) => (
               <li

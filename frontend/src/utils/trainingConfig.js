@@ -198,6 +198,8 @@ export const DIFICULTAD_POR_NIVEL = {
   avanzado: "expert",
 };
 
+export const ITEMS_POR_PAGINA = 3;
+
 export function obtenerConfiguracionObjetivo(idObjetivo) {
   return OBJETIVOS[idObjetivo] ?? null;
 }

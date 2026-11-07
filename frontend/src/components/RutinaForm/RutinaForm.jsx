@@ -51,6 +51,7 @@ function RutinaForm({ onSubmit }) {
           className="rutina-form__select"
           value={objetivo}
           onChange={(e) => setObjetivo(e.target.value)}
+          required
         >
           <option value="">Elegí un objetivo</option>
           {Object.entries(OBJETIVOS).map(([id, config]) => (
