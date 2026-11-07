@@ -58,6 +58,11 @@
   transform: scale(0.96);
 }
 
+.chip:focus-visible {
+  outline: 2px solid var(--yellow);
+  outline-offset: 2px;
+}
+
 .rutina-form__submit {
   align-self: flex-start;
   padding: 12px 24px;
